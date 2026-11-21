@@ -20,6 +20,8 @@ def signup(email, password, role, existing_emails):
         return "INVALID_EMAIL"
 
     # Rule 3: Validate role
+    role = role.strip().lower()
+
     if role not in {"staff", "manager", "owner"}:
         return "INVALID_ROLE"
 
