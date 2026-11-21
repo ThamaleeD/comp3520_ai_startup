@@ -1,0 +1,28 @@
+I001 [*] Import block is un-sorted or un-formatted
+ --> manual/booking.py:1:1
+  |
+1 | / from datetime import datetime, timedelta
+2 | | import re
+  | |_________^
+help: Organize imports
+  |
+  - from datetime import datetime, timedelta
+1 | import re
+  -
+2 + from datetime import datetime, timedelta
+3 |
+  |
+
+TRY004 Prefer `TypeError` exception for invalid type
+ --> manual/pay.py:6:9
+  |
+4 |     # Normalize and validate role
+5 |     if not isinstance(role, str):
+6 |         raise ValueError("Invalid role")
+  |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+7 |
+8 |     role = role.strip().lower()
+  |
+
+Found 2 errors.
+[*] 1 fixable with `--fix`.
