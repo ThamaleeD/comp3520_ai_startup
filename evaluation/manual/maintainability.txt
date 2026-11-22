@@ -1,5 +1,0 @@
-manual/signup.py - A (70.63)
-manual/roles.py - A (97.34)
-manual/booking.py - A (56.93)
-manual/pay.py - A (63.90)
-manual/holidays.py - A (47.17)

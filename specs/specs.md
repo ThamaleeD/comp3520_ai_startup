@@ -2,7 +2,7 @@
 
 COMP 3520 Assignment 4. Team: Thamalee Dasanayake, Akshana Leninrajah
 
-ShiftWise is a made-up startup app for scheduling shifts at any company that runs shift work. Example: construction, where 12-hour shifts are common.
+ShiftWise is a made-up startup app for scheduling shifts at any company that runs shift work. Example: construction, where long shifts are common.
 Each feature is one Python function. The AI only sees this file. The hidden tests are kept separately.
 
 **Applies to every feature:** role names ignore capital letters and extra spaces. `"MANAGER"`, `"Manager"`, `" manager "` all mean `"manager"`. Same for `"staff"` and `"owner"`.
@@ -85,21 +85,22 @@ The part before `@` must follow one of these formats:
 - `start`, `end`: `"HH:MM:SS"` format, 24-hour clock, e.g. `"09:00:00"`, `"17:30:00"`
 - A staff member's schedule = their shifts, shown by date and start/end time.
 
-**Daily limit and break:**
+**Hours and break:**
 
 - Every working day includes one 30-minute unpaid break.
 - Hours worked on a day = total scheduled time that day − 30 min.
-- A normal shift is up to **12 hours worked** (e.g. 07:00:00–19:30:00). Hours over 12 are allowed but paid as double time (see Feature 5).
-- Hard safety limit: max **16 hours worked per day**.
+- **Normal:** up to 8 hours worked per day (e.g. 09:00:00–17:30:00) and 40 per week.
+- **Extended:** over 8 and up to 12 hours a day, or over 40 a week, is allowed, but management has to approve it. The function returns `"NEEDS_APPROVAL"` so a manager can approve, decline, or talk to the staff member.
+- **Max:** 12 hours worked per day. Over that is blocked.
 - A week runs Monday to Sunday.
 
-**Rules (check in this order, return the first error):**
+**Rules (check in this order, return the first one that applies):**
 
 1. `date` must be a real date in `MM-DD-YY` format. Else `"INVALID_DATE"`.
 2. `start` and `end` must be real times in `HH:MM:SS` format, and `end` must be after `start` on the same day (no overnight shifts). Else `"INVALID_TIME"`.
 3. Each staff member has their own schedule. Different staff members CAN have overlapping shifts (amy 09:00–17:30 and raj 09:00–17:30 is fine). Only a staff member's own shifts can't overlap each other on the same date. Touching is fine (one ends at 13:00:00, next starts at 13:00:00). Else `"OVERLAP"`.
-4. That staff member's hours worked on that date, including this shift, can't go over 16. Else `"TOO_LONG"`.
-5. That staff member's hours worked for the week (Mon–Sun), including this shift, can't go over 60. Else `"OVER_HOURS"`. (Over 40 is allowed but paid as overtime, see Feature 5.)
+4. Hours worked on that date, including this shift, can't go over 12. Else `"TOO_LONG"`.
+5. If hours worked on that date go over 8, OR hours worked that week (Mon–Sun) go over 40, return `"NEEDS_APPROVAL"`.
 6. Otherwise return `"OK"`. Do not change the `shifts` list.
 
 **Examples:**
@@ -107,15 +108,15 @@ The part before `@` must follow one of these formats:
 | existing shifts | new shift | result |
 |---|---|---|
 | none | amy, 11-16-26, 09:00:00–17:30:00 | `"OK"` (8 hrs worked) |
-| none | amy, 11-16-26, 07:00:00–19:30:00 | `"OK"` (12 hrs worked) |
-| none | amy, 11-16-26, 06:00:00–23:00:00 | `"TOO_LONG"` (16.5 hrs worked) |
+| none | amy, 11-16-26, 07:00:00–19:30:00 | `"NEEDS_APPROVAL"` (12 hrs worked) |
+| none | amy, 11-16-26, 06:00:00–19:30:00 | `"TOO_LONG"` (13 hrs worked) |
 | none | amy, 2026-11-16, 09:00:00–17:00:00 | `"INVALID_DATE"` |
 | none | amy, 11-16-26, 17:00:00–09:00:00 | `"INVALID_TIME"` |
 | amy 11-16-26 09:00:00–13:00:00 | amy, 11-16-26, 12:00:00–16:00:00 | `"OVERLAP"` |
 | amy 11-16-26 09:00:00–13:00:00 | amy, 11-16-26, 13:00:00–17:30:00 | `"OK"` (8 hrs worked that day) |
 | amy 11-16-26 09:00:00–17:30:00 | raj, 11-16-26, 09:00:00–17:30:00 | `"OK"` (different staff) |
-| amy Mon–Thu (11-16 to 11-19), 07:00:00–19:30:00 each | amy, 11-20-26, 07:00:00–19:30:00 | `"OK"` (60 hrs that week) |
-| amy Mon–Fri (11-16 to 11-20), 07:00:00–19:30:00 each | amy, 11-21-26, 07:00:00–08:00:00 | `"OVER_HOURS"` (60.5 hrs) |
+| amy Mon–Thu (11-16 to 11-19), 09:00:00–17:30:00 each | amy, 11-20-26, 09:00:00–17:30:00 | `"OK"` (40 hrs that week) |
+| amy Mon–Fri (11-16 to 11-20), 09:00:00–17:30:00 each | amy, 11-21-26, 09:00:00–10:00:00 | `"NEEDS_APPROVAL"` (40.5 hrs) |
 
 ---
 

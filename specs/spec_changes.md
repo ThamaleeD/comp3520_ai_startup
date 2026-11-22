@@ -17,7 +17,7 @@ Date of review: Nov 18, 2026
 | # | Feature | First draft (AI) | Changed to | Reason | Changed by |
 |---|---|---|---|---|---|
 | 1 | App | Name "ShiftSwap" | Name "ShiftWise" | Shift swaps were removed, so the old name no longer fit | Thamalee (AI suggested the name, Thamalee chose it) |
-| 2 | Setting | Small business | Any company that runs shift work, with a set team structure (example: construction) | Long shifts, like construction's 12-hr shifts, need to be supported | Thamalee |
+| 2 | Setting | Small business | Any company that runs shift work, with a set team structure (example: construction) | Long shifts, like in construction, need to be supported | Thamalee |
 | 3 | All | Role names not covered outside Feature 4 | Role names ignore capitals and spaces in every feature (`MANAGER` = `manager`) | Users type roles differently; the system should treat them as the same word | Thamalee |
 | 4 | All | No pay types | Staff = hourly; manager and owner = salary | Matches how corporate roles are paid | Thamalee |
 | 5 | 1 Sign-up | One list of existing emails | Three lists: staff, manager, owner | Accounts are grouped by role | Thamalee |
@@ -25,7 +25,7 @@ Date of review: Nov 18, 2026
 | 7 | 1 Sign-up | No name rule | Format `<role>_<name>`; if the name is taken, add a surname (`staff_amy.chen`) or employee ID (`staff_amy1042`) | Better identification when names repeat | Thamalee |
 | 8 | 1 Sign-up | Password: 8+ chars, 1 number, 1 capital | Also needs 1 special character | Stronger password policy | Thamalee |
 | 9 | 2 Booking | Day as a number 0–6, whole hours | Date in `MM-DD-YY`, time in `HH:MM:SS` | Real date and time formats | Thamalee |
-| 10 | 2 Booking | Max 12 hrs per shift | 30-min break per day; normal shift up to 12 hrs worked; hours over 12 allowed (paid double time) | Supports long-shift industries, e.g. construction | Thamalee |
+| 10 | 2 Booking | Max 12 hrs per shift; max 40 hrs/week | Normal day 8 hrs, normal week 40 hrs, 30-min break. Over 8/day (up to 12) or over 40/week needs management approval (`NEEDS_APPROVAL`). Max 12 hrs/day (`TOO_LONG`). | Long days happen, but management should be able to approve, decline or talk to the staff member | Thamalee |
 | 11 | 2 Booking | Overlap rule unclear | Each staff member has their own schedule. Different staff can overlap; one person can't double-book themselves | Several staff often work the same hours | Thamalee |
 | 12 | 3 | Shift swaps (manager approval) | Removed. Replaced with holiday requests | With a set team structure, swaps aren't needed | Thamalee |
 | 13 | 3 Holidays | — | Staff holidays approved by a manager; manager holidays approved by the owner | Follows the reporting structure | Thamalee |
@@ -53,8 +53,8 @@ These weren't in Thamalee's changes. Claude added them to make the rules complet
 | F | 3 Holidays | Nobody can approve their own request | To confirm |
 | G | 5 Pay | Double-time hours don't count toward the 40 | To confirm |
 | H | 5 Pay | Hours on a holiday must be 0 | To confirm |
-| I | 2 Booking | Daily safety limit of 16 hrs worked (else `TOO_LONG`) | To confirm |
-| J | 2 Booking | Weekly booking limit raised from 40 to 60 hrs, so overtime over 40 can happen | To confirm |
+| I | 2 Booking | No weekly maximum, only a weekly approval point at 40 hrs | To confirm |
+| J | 5 Pay | Double time over 12 hrs/day stays in the pay rules, even though booking blocks over 12. It covers actual hours worked, e.g. someone stays late on site | To confirm |
 
 ---
 
@@ -62,7 +62,7 @@ These weren't in Thamalee's changes. Claude added them to make the rules complet
 
 | Issue | Decision |
 |---|---|
-| Booking limits clashed with overtime and double-time pay (an 8 hr/day and 40 hr/week booking cap meant OT and double time could never happen) | Team chose to support 12-hr shifts (construction used as an example). Booking limits raised (see I and J), so OT and double time can now happen. |
+| Booking limits clashed with overtime and double-time pay | Thamalee set normal hours at 8/day and 40/week, with longer days (up to 12) or weeks needing management approval. Overtime over 40 can now happen once approved. |
 
 ---
 
